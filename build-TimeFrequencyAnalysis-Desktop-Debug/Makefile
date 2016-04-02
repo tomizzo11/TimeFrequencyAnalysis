@@ -14,11 +14,11 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-CXXFLAGS      = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I../TimeFrequencyAnalysis -I/usr/include/qt5 -I/usr/include/qt5/QtPrintSupport -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I. -I. -I.
+CXXFLAGS      = -m64 -pipe -g -std=c++0x -Wall -W -D_REENTRANT -fPIE $(DEFINES)
+INCPATH       = -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I../TimeFrequencyAnalysis -I../../AquilPractice/aquila-build -I../../AquilPractice/aquila-build -I/usr/include/qt5 -I/usr/include/qt5/QtPrintSupport -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I. -I. -I.
 LINK          = g++
 LFLAGS        = -m64
-LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5PrintSupport -L/usr/lib/x86_64-linux-gnu -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -L/home/teague/Programming/TimeFrequencyAnalysis/TimeFrequencyAnalysis/../../AquilPractice/aquila-build/ -lAquila -L/home/teague/Programming/TimeFrequencyAnalysis/TimeFrequencyAnalysis/../../AquilPractice/aquila-build/lib/ -lOoura_fft -lQt5PrintSupport -L/usr/lib/x86_64-linux-gnu -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
@@ -100,6 +100,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/declarative_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/gdb_dwarf_index.prf \
@@ -145,7 +146,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): /home/teague/Programming/TimeFrequencyAnalysis/TimeFrequencyAnalysis/../../AquilPractice/aquila-build/libAquila.a /home/teague/Programming/TimeFrequencyAnalysis/TimeFrequencyAnalysis/../../AquilPractice/aquila-build/lib/libOoura_fft.a ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 	{ test -n "$(DESTDIR)" && DESTDIR="$(DESTDIR)" || DESTDIR=.; } && test $$(gdb --version | sed -e 's,[^0-9][^0-9]*\([0-9]\)\.\([0-9]\).*,\1\2,;q') -gt 72 && gdb --nx --batch --quiet -ex 'set confirm off' -ex "save gdb-index $$DESTDIR" -ex quit '$(TARGET)' && test -f $(TARGET).gdb-index && objcopy --add-section '.gdb_index=$(TARGET).gdb-index' --set-section-flags '.gdb_index=readonly' '$(TARGET)' '$(TARGET)' && rm -f $(TARGET).gdb-index || true
 
@@ -195,6 +196,7 @@ Makefile: ../TimeFrequencyAnalysis/TimeFrequencyAnalysis.pro /usr/lib/x86_64-lin
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/declarative_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/gdb_dwarf_index.prf \
@@ -261,6 +263,7 @@ Makefile: ../TimeFrequencyAnalysis/TimeFrequencyAnalysis.pro /usr/lib/x86_64-lin
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/declarative_debug.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/unix/gdb_dwarf_index.prf:
@@ -287,7 +290,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/TimeFrequencyAnalysis1.0.0 || mkdir -p .tmp/TimeFrequencyAnalysis1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/TimeFrequencyAnalysis1.0.0/ && $(COPY_FILE) --parents ../TimeFrequencyAnalysis/mainwindow.h ../TimeFrequencyAnalysis/qcustomplot.h .tmp/TimeFrequencyAnalysis1.0.0/ && $(COPY_FILE) --parents ../TimeFrequencyAnalysis/main.cpp ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/qcustomplot.cpp .tmp/TimeFrequencyAnalysis1.0.0/ && $(COPY_FILE) --parents ../TimeFrequencyAnalysis/mainwindow.ui .tmp/TimeFrequencyAnalysis1.0.0/ && (cd `dirname .tmp/TimeFrequencyAnalysis1.0.0` && $(TAR) TimeFrequencyAnalysis1.0.0.tar TimeFrequencyAnalysis1.0.0 && $(COMPRESS) TimeFrequencyAnalysis1.0.0.tar) && $(MOVE) `dirname .tmp/TimeFrequencyAnalysis1.0.0`/TimeFrequencyAnalysis1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/TimeFrequencyAnalysis1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/TimeFrequencyAnalysis1.0.0/ && $(COPY_FILE) --parents ../TimeFrequencyAnalysis/mainwindow.h ../TimeFrequencyAnalysis/qcustomplot.h ../TimeFrequencyAnalysis/aquila/source/generator/Generator.h ../TimeFrequencyAnalysis/aquila/source/generator/PinkNoiseGenerator.h ../TimeFrequencyAnalysis/aquila/source/generator/SineGenerator.h ../TimeFrequencyAnalysis/aquila/source/generator/SquareGenerator.h ../TimeFrequencyAnalysis/aquila/source/generator/TriangleGenerator.h ../TimeFrequencyAnalysis/aquila/source/generator/WhiteNoiseGenerator.h ../TimeFrequencyAnalysis/aquila/ml/Dtw.h ../TimeFrequencyAnalysis/aquila/ml/DtwPoint.h ../TimeFrequencyAnalysis/aquila/source/window/BarlettWindow.h ../TimeFrequencyAnalysis/aquila/source/window/BlackmanWindow.h ../TimeFrequencyAnalysis/aquila/source/window/FlattopWindow.h ../TimeFrequencyAnalysis/aquila/source/window/GaussianWindow.h ../TimeFrequencyAnalysis/aquila/source/window/HammingWindow.h ../TimeFrequencyAnalysis/aquila/source/window/HannWindow.h ../TimeFrequencyAnalysis/aquila/source/window/RectangularWindow.h ../TimeFrequencyAnalysis/aquila/source/Frame.h ../TimeFrequencyAnalysis/aquila/source/FramesCollection.h ../TimeFrequencyAnalysis/aquila/source/PlainTextFile.h ../TimeFrequencyAnalysis/aquila/source/RawPcmFile.h ../TimeFrequencyAnalysis/aquila/source/SignalSource.h ../TimeFrequencyAnalysis/aquila/source/WaveFile.h ../TimeFrequencyAnalysis/aquila/source/WaveFileHandler.h ../TimeFrequencyAnalysis/aquila/synth/KarplusStrongSynthesizer.h ../TimeFrequencyAnalysis/aquila/synth/SineSynthesizer.h ../TimeFrequencyAnalysis/aquila/synth/Synthesizer.h ../TimeFrequencyAnalysis/aquila/tools/TextPlot.h ../TimeFrequencyAnalysis/aquila/transform/AquilaFft.h ../TimeFrequencyAnalysis/aquila/transform/Dct.h ../TimeFrequencyAnalysis/aquila/transform/Dft.h ../TimeFrequencyAnalysis/aquila/transform/Fft.h ../TimeFrequencyAnalysis/aquila/transform/FftFactory.h ../TimeFrequencyAnalysis/aquila/transform/Mfcc.h ../TimeFrequencyAnalysis/aquila/transform/OouraFft.h ../TimeFrequencyAnalysis/aquila/transform/Spectrogram.h ../TimeFrequencyAnalysis/aquila/wrappers/SoundBufferAdapter.h .tmp/TimeFrequencyAnalysis1.0.0/ && $(COPY_FILE) --parents ../TimeFrequencyAnalysis/main.cpp ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/qcustomplot.cpp .tmp/TimeFrequencyAnalysis1.0.0/ && $(COPY_FILE) --parents ../TimeFrequencyAnalysis/mainwindow.ui .tmp/TimeFrequencyAnalysis1.0.0/ && (cd `dirname .tmp/TimeFrequencyAnalysis1.0.0` && $(TAR) TimeFrequencyAnalysis1.0.0.tar TimeFrequencyAnalysis1.0.0 && $(COMPRESS) TimeFrequencyAnalysis1.0.0.tar) && $(MOVE) `dirname .tmp/TimeFrequencyAnalysis1.0.0`/TimeFrequencyAnalysis1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/TimeFrequencyAnalysis1.0.0
 
 
 clean:compiler_clean 
@@ -1630,11 +1633,17 @@ mainwindow.o: ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/m
 		/usr/include/qt5/QtGui/qinputmethod.h \
 		/usr/include/qt5/QtWidgets/QButtonGroup \
 		/usr/include/qt5/QtWidgets/qbuttongroup.h \
+		/usr/include/qt5/QtWidgets/QFrame \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		/usr/include/qt5/QtWidgets/QHBoxLayout \
+		/usr/include/qt5/QtWidgets/qboxlayout.h \
+		/usr/include/qt5/QtWidgets/qlayout.h \
+		/usr/include/qt5/QtWidgets/qlayoutitem.h \
+		/usr/include/qt5/QtWidgets/qgridlayout.h \
 		/usr/include/qt5/QtWidgets/QHeaderView \
 		/usr/include/qt5/QtWidgets/qheaderview.h \
 		/usr/include/qt5/QtWidgets/qabstractitemview.h \
 		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
 		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		/usr/include/qt5/QtCore/qitemselectionmodel.h \
 		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
@@ -1649,16 +1658,18 @@ mainwindow.o: ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/m
 		/usr/include/qt5/QtWidgets/qrubberband.h \
 		/usr/include/qt5/QtWidgets/QLabel \
 		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/QMenu \
+		/usr/include/qt5/QtWidgets/qmenu.h \
 		/usr/include/qt5/QtWidgets/QMenuBar \
 		/usr/include/qt5/QtWidgets/qmenubar.h \
-		/usr/include/qt5/QtWidgets/qmenu.h \
+		/usr/include/qt5/QtWidgets/QProgressBar \
+		/usr/include/qt5/QtWidgets/qprogressbar.h \
 		/usr/include/qt5/QtWidgets/QPushButton \
 		/usr/include/qt5/QtWidgets/qpushbutton.h \
 		/usr/include/qt5/QtWidgets/qabstractbutton.h \
 		/usr/include/qt5/QtWidgets/QStatusBar \
 		/usr/include/qt5/QtWidgets/qstatusbar.h \
-		/usr/include/qt5/QtWidgets/QToolBar \
-		/usr/include/qt5/QtWidgets/qtoolbar.h \
+		/usr/include/qt5/QtWidgets/QVBoxLayout \
 		/usr/include/qt5/QtWidgets/QWidget \
 		../TimeFrequencyAnalysis/qcustomplot.h \
 		/usr/include/qt5/QtCore/QObject \
@@ -1914,10 +1925,6 @@ mainwindow.o: ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/m
 		/usr/include/qt5/QtWidgets/qtreeview.h \
 		/usr/include/qt5/QtWidgets/qtreewidget.h \
 		/usr/include/qt5/QtWidgets/qtreewidgetitemiterator.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
 		/usr/include/qt5/QtWidgets/qformlayout.h \
 		/usr/include/qt5/QtWidgets/QLayout \
 		/usr/include/qt5/QtWidgets/qgesture.h \
@@ -1964,7 +1971,6 @@ mainwindow.o: ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/m
 		/usr/include/qt5/QtWidgets/qmdisubwindow.h \
 		/usr/include/qt5/QtWidgets/qplaintextedit.h \
 		/usr/include/qt5/QtWidgets/qtextedit.h \
-		/usr/include/qt5/QtWidgets/qprogressbar.h \
 		/usr/include/qt5/QtWidgets/qradiobutton.h \
 		/usr/include/qt5/QtWidgets/qscrollbar.h \
 		/usr/include/qt5/QtWidgets/qsizegrip.h \
@@ -1973,6 +1979,7 @@ mainwindow.o: ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/m
 		/usr/include/qt5/QtWidgets/qsplitter.h \
 		/usr/include/qt5/QtWidgets/qstackedwidget.h \
 		/usr/include/qt5/QtWidgets/qtextbrowser.h \
+		/usr/include/qt5/QtWidgets/qtoolbar.h \
 		/usr/include/qt5/QtWidgets/qtoolbox.h \
 		/usr/include/qt5/QtWidgets/qtoolbutton.h \
 		/usr/include/qt5/QtWidgets/qtwidgetsversion.h \
@@ -1984,7 +1991,15 @@ mainwindow.o: ../TimeFrequencyAnalysis/mainwindow.cpp ../TimeFrequencyAnalysis/m
 		/usr/include/qt5/QtCore/QPair \
 		/usr/include/qt5/QtPrintSupport/qprintpreviewwidget.h \
 		/usr/include/qt5/QtPrintSupport/qtprintsupportversion.h \
-		/usr/include/qt5/QtWidgets/QFileDialog
+		/usr/include/qt5/QtWidgets/QFileDialog \
+		../TimeFrequencyAnalysis/aquila/global.h \
+		../TimeFrequencyAnalysis/aquila/source/generator/SineGenerator.h \
+		../TimeFrequencyAnalysis/aquila/source/generator/Generator.h \
+		../TimeFrequencyAnalysis/aquila/source/SignalSource.h \
+		../TimeFrequencyAnalysis/aquila/transform/FftFactory.h \
+		../TimeFrequencyAnalysis/aquila/transform/Fft.h \
+		../TimeFrequencyAnalysis/aquila/tools/TextPlot.h \
+		../TimeFrequencyAnalysis/aquila/source/WaveFile.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../TimeFrequencyAnalysis/mainwindow.cpp
 
 qcustomplot.o: ../TimeFrequencyAnalysis/qcustomplot.cpp ../TimeFrequencyAnalysis/qcustomplot.h \

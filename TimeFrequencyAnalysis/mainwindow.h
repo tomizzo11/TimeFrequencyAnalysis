@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "aquila/transform/FftFactory.h"
+#include "aquila/transform/Fft.h"
+#include "aquila/source/WaveFile.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,6 +22,7 @@ private slots:
 
     void on_loadButton_clicked();
     void on_startButton_clicked();
+
 
 private:
     Ui::MainWindow *ui;
