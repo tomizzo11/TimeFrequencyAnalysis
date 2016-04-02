@@ -15,6 +15,7 @@
 #include <complex>
 #include <string>
 #include "aquila/transform/AquilaFft.h"
+#include <cstring>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -72,15 +73,32 @@ void MainWindow::on_startButton_clicked()
     const std::size_t SIZE = pWaveFile->getSamplesCount();
     const Aquila::FrequencyType sampleFreq = pWaveFile->getSampleFrequency();
 
+    //long sample_size = sizeof(pWaveFile->toArray());// sizeof((pWaveFile->toArray())[0]);
+    //auto samples = pWaveFile->getSamplesCount();
 
+    //ui->filePathLabel->setText(QString::number(samples));
+
+    //std::unique_ptr<std::vector<double>> pSampleVector(new std::vector<double>(262143));
+
+    int bps = pWaveFile->getBitsPerSample();
+    int byps = pWaveFile->getBytesPerSample();
+
+    void *newptr = malloc(8*262144);
+
+    std::memcpy(newptr, pWaveFile->toArray(), 8*200008);
+
+
+
+    //*pSampleVector = pWaveFile->toArray();
 
     /* Calculate the FFT */
 
-        //std::shared_ptr<Aquila::Fft> pFftInterface = Aquila::FftFactory::getFft(SIZE);  // This returns a shared pointer to an FFT calculation object.
-        std::unique_ptr<Aquila::AquilaFft> pAquilaFft(new Aquila::AquilaFft(SIZE));
-        auto time_array = pWaveFile->toArray();
+        std::shared_ptr<Aquila::Fft> pFftInterface = Aquila::FftFactory::getFft(65);  // This returns a shared pointer to an FFT calculation object.
 
-        //auto spectrum_vector = pAquilaFft->fft(pWaveFile->toArray());
+
+       auto spectrum_vector = pFftInterface->fft((double*)newptr);
+
+       free(newptr);
 
 
         /* All this is a vector of complex type */
