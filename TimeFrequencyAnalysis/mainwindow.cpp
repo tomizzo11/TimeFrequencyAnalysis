@@ -64,77 +64,58 @@ void MainWindow::on_startButton_clicked()
     /* Get a file name from user inputted text */
     QString file_name = ui->filePathLabel->text();
 
-    /* Create a wavefile object in heap, return pointer to it */
-    std::unique_ptr<Aquila::WaveFile> pWaveFile(new Aquila::WaveFile(file_name.toStdString()));
+    /* create wave object */
+    Aquila::WaveFile wave_object(file_name.toStdString());
 
     /* Get some information from the newly created wave file object */
+    const std::size_t SIZE = wave_object.getSamplesCount();
+    const Aquila::FrequencyType sampleFreq = wave_object.getSampleFrequency();
 
-
-    const std::size_t SIZE = pWaveFile->getSamplesCount();
-    const Aquila::FrequencyType sampleFreq = pWaveFile->getSampleFrequency();
-
-    //long sample_size = sizeof(pWaveFile->toArray());// sizeof((pWaveFile->toArray())[0]);
-    //auto samples = pWaveFile->getSamplesCount();
-
-    //ui->filePathLabel->setText(QString::number(samples));
-
-    //std::unique_ptr<std::vector<double>> pSampleVector(new std::vector<double>(262143));
-
-    int bps = pWaveFile->getBitsPerSample();
-    int byps = pWaveFile->getBytesPerSample();
-
-    void *newptr = malloc(8*262144);
-
-    std::memcpy(newptr, pWaveFile->toArray(), 8*200008);
+    int bps = wave_object.getBitsPerSample();
+    int byps = wave_object.getBytesPerSample();
 
 
 
-    //*pSampleVector = pWaveFile->toArray();
+    //unique_ptr<
+
+        void *newptr = malloc(8*32768);
+        std::memset(newptr, 0, 8*32768);
+
+        std::memcpy(newptr, wave_object.toArray(), 8*22129);
+
+
 
     /* Calculate the FFT */
 
-        std::shared_ptr<Aquila::Fft> pFftInterface = Aquila::FftFactory::getFft(65);  // This returns a shared pointer to an FFT calculation object.
+      std::shared_ptr<Aquila::Fft> p_fft_interface = Aquila::FftFactory::getFft(32768);  // This returns a shared pointer to an FFT calculation object.
 
 
-       auto spectrum_vector = pFftInterface->fft((double*)newptr);
+    auto spectrum = p_fft_interface->fft((double*)newptr);
 
-       free(newptr);
+      free(newptr);
 
+            QVector<double> x(SIZE);
+            QVector<double> y(SIZE);
 
-        /* All this is a vector of complex type */
-        //std::unique_ptr<Aquila::SpectrumType> pSpectrum(new Aquila::SpectrumType(SIZE+20000));
-
-        /* Take the FFT object, use it to compute FFT on the wave file data in array form. BREAKS PROGRAM */
-       // auto fft_vector = pFftInterface->fft(pWaveFile->toArray());  // This is the line that breaks the program
-
-
-        int hi = 23;
-
-        //  std::unique_ptr<QVector<double>> x(new QVector<double>(SIZE));
-        //  std::unique_ptr<QVector<double>> y(new QVector<double>(SIZE));
-
-       //  double maxValue = 0;
-   /*      for(int i = 0; i < SIZE; i++)
+        double max_value = 0;
+         for(int i = 0; i < SIZE; i++)
         {
-            (*x)[i] = i*(sampleFreq*SIZE);
-            (*y)[i] = abs((*spectrum)[i]);
+            x[i] = i*(1.0/sampleFreq);
+            y[i] = abs((spectrum)[i]);
 
-            if(abs((*spectrum)[i]) > maxValue)
+            if(abs(spectrum[i]) > max_value)
             {
-                maxValue = abs((*spectrum)[i]);
+                max_value = abs(spectrum[i]);
             }
-        } */
+        }
+
 
         // Initialize qCustomPlot //
-   /*     ui->customPlot->xAxis->setLabel("frequency");
+        ui->customPlot->xAxis->setLabel("frequency");
         ui->customPlot->yAxis->setLabel("amplitude");
-        ui->customPlot->xAxis->setRange(0, 3);
-        ui->customPlot->yAxis->setRange(-maxValue, maxValue);
-        ui->customPlot->replot(); */
-
- //   delete pWaveFile;
- //   delete spectrum;
-
+        ui->customPlot->xAxis->setRange(0, 0.5);
+        ui->customPlot->yAxis->setRange(-max_value, max_value);
+        ui->customPlot->replot();
 
     /* Initialize qCustomPlot */
     /*
@@ -145,14 +126,12 @@ void MainWindow::on_startButton_clicked()
     ui->customPlot->replot();
     */
 
-    // create graph and assign data to it:
-
-    /*
+   // create graph and assign data to it:
     ui->customPlot->addGraph();
     ui->customPlot->graph(0)->setData(x, y);
     ui->customPlot->replot();
 
-    */
+
 
     // input signal parameters
 
