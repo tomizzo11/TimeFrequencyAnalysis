@@ -15,11 +15,12 @@
 #include "aquila/transform/AquilaFft.h"
 #include <cstring>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    ui_controller(ui, this)
 {
-
 
     /* create instance of widgets as defined in mainwindow.ui */
     ui->setupUi(this);
@@ -44,6 +45,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_loadButton_clicked()
 {
+    ui_controller.selectFile();
+
+    /*
     QString sound_filename= QFileDialog::getOpenFileName(
                 this,
                 tr("Open File"),
@@ -54,7 +58,7 @@ void MainWindow::on_loadButton_clicked()
     if (!sound_filename.isNull())
     {
         ui->filePathLabel->setText(sound_filename);
-    }
+    } */
 }
 
 void MainWindow::on_startButton_clicked()

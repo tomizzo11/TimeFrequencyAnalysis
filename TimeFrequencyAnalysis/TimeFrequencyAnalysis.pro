@@ -17,7 +17,8 @@ TEMPLATE = app
 
 SOURCES +=  main.cpp\
             mainwindow.cpp \
-            qcustomplot.cpp
+            qcustomplot.cpp \
+    userinputcontroller.cpp
 
 HEADERS  += mainwindow.h \
             qcustomplot.h \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.h \
     aquila/transform/Mfcc.h \
     aquila/transform/OouraFft.h \
     aquila/transform/Spectrogram.h \
-    aquila/wrappers/SoundBufferAdapter.h
+    aquila/wrappers/SoundBufferAdapter.h \
+    userinputcontroller.h
 
 FORMS    += \
     mainwindow.ui

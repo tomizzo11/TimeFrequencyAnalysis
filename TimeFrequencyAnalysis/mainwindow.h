@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "aquila/transform/FftFactory.h"
-#include "aquila/transform/Fft.h"
-#include "aquila/source/WaveFile.h"
+#include "userinputcontroller.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +24,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    UserInputController ui_controller;
+
 };
 
 #endif // MAINWINDOW_H
