@@ -15,11 +15,16 @@
 #include "aquila/transform/AquilaFft.h"
 #include <cstring>
 
+#include "display.h"
+#include "uiprocessor.h"
+#include "calcobject.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    ui_controller(ui, this)
+    p_display(new Display(ui)),
+    p_ui_processor(new UIProcessor()),
+    p_calc_object(new CalcObject())
 {
 
     /* create instance of widgets as defined in mainwindow.ui */
@@ -45,8 +50,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_loadButton_clicked()
 {
-    ui_controller.selectFile();
-
     /*
     QString sound_filename= QFileDialog::getOpenFileName(
                 this,
