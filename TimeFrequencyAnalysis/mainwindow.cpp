@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include "qcustomplot.h"
+#include <QTest>
 
 #include "aquila/global.h"
 #include "aquila/source/generator/SineGenerator.h"
@@ -60,27 +61,25 @@ void MainWindow::on_startButton_clicked()
     /* Get some information from the newly created wave file object */
     const std::size_t total_samples = wave_object.getSamplesCount();
     const Aquila::FrequencyType sample_freq = wave_object.getSampleFrequency();
-    int bps = wave_object.getBitsPerSample();
-    int samples = wave_object.getSamplesCount();
-    ui->filePathLabel->setText(QString::fromStdString(std::to_string(samples)));
 
     /* sample window */
     int window_size = 16384;
-    //window_size = 32768;
 
     /* Calculate the FFT */
     std::shared_ptr<Aquila::Fft> p_fft_interface = Aquila::FftFactory::getFft(window_size);  // This returns a shared pointer to an FFT calculation object.
-    auto spectrum = p_fft_interface->fft(wave_object.toArray()+90000);
+ //   auto spectrum = p_fft_interface->fft(wave_object.toArray()+90000);
 
-        QVector<double> x(window_size);
-        QVector<double> y(window_size);
+    QVector<double> x(window_size);
+    QVector<double> y(window_size);
+
+    for(int j = 0; j < 80; j++)
+    {
+        auto spectrum = p_fft_interface->fft(wave_object.toArray() + j*5000);
 
         double max_value = 0;
 
         /* Iterator based loop */
-
         double i = 0;
-
         for(auto itr = wave_object.begin(); itr.getPosition() < window_size; itr++)
         {
 
@@ -94,6 +93,9 @@ void MainWindow::on_startButton_clicked()
                 max_value = abs(spectrum[i]);
             }
         }
-
         p_display->updateFreqPlot(x, y, max_value);
+
+        QTest::qSleep(250);
+
+    }
 }

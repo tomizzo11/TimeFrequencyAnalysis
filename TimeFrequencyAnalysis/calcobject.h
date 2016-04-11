@@ -5,6 +5,7 @@ class CalcObject
 {
 public:
     CalcObject();
+
 };
 
 #endif // CALCOBJECT_H
