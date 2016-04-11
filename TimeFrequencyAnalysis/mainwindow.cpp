@@ -16,41 +16,26 @@
 #include <cstring>
 
 #include "display.h"
-#include "uiprocessor.h"
 #include "calcobject.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     p_display(new Display(ui)),
-    p_ui_processor(new UIProcessor()),
     p_calc_object(new CalcObject())
 {
-
     /* create instance of widgets as defined in mainwindow.ui */
     ui->setupUi(this);
 
-    /* Initialize progressBar parameters*/
-    ui->progressBar->setMinimum(0);
-    ui->progressBar->setMaximum(100);
-    ui->progressBar->setValue(0);
-
-    /* Initialize qCustomPlot */
-    ui->customPlot->xAxis->setLabel("Frequency (Hz)");
-    ui->customPlot->yAxis->setLabel("Relative Amplitude");
-    ui->customPlot->xAxis->setRange(0, 20000);
-    ui->customPlot->yAxis->setRange(0, 1000);
-    ui->customPlot->replot();
+    p_display->initDisplay();
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
 void MainWindow::on_loadButton_clicked()
 {
-    /*
     QString sound_filename= QFileDialog::getOpenFileName(
                 this,
                 tr("Open File"),
@@ -61,7 +46,7 @@ void MainWindow::on_loadButton_clicked()
     if (!sound_filename.isNull())
     {
         ui->filePathLabel->setText(sound_filename);
-    } */
+    }
 }
 
 void MainWindow::on_startButton_clicked()
@@ -81,7 +66,7 @@ void MainWindow::on_startButton_clicked()
 
     /* sample window */
     int window_size = 16384;
-        //window_size = 32768;
+    //window_size = 32768;
 
     /* Calculate the FFT */
     std::shared_ptr<Aquila::Fft> p_fft_interface = Aquila::FftFactory::getFft(window_size);  // This returns a shared pointer to an FFT calculation object.
@@ -91,16 +76,6 @@ void MainWindow::on_startButton_clicked()
         QVector<double> y(window_size);
 
         double max_value = 0;
-        /* for(int i = 0; i < window_size; i++)
-        {
-            x[i] = i*(sample_freq/window_size);
-            y[i] = abs(spectrum[i]);
-
-            if(abs(spectrum[i]) > max_value)
-            {
-                max_value = abs(spectrum[i]);
-            }
-        } */
 
         /* Iterator based loop */
 
@@ -120,14 +95,5 @@ void MainWindow::on_startButton_clicked()
             }
         }
 
-        // Initialize qCustomPlot //
-        //ui->customPlot->xAxis->setRange(0, 20000);
-        ui->customPlot->yAxis->setRange(0, max_value);
-        ui->customPlot->replot();
-
-        // create graph and assign data to it:
-        ui->customPlot->addGraph();
-        ui->customPlot->graph(0)->setData(x, y);
-        ui->customPlot->replot();
-
+        p_display->updateFreqPlot(x, y, max_value);
 }

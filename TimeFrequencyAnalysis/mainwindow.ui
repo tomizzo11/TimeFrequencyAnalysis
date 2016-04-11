@@ -18,8 +18,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>588</width>
-    <height>406</height>
+    <width>2000</width>
+    <height>1000</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
    </property>
    <property name="maximumSize">
     <size>
-     <width>588</width>
+     <width>2000</width>
      <height>16777215</height>
     </size>
    </property>
@@ -65,14 +65,13 @@
         <height>250</height>
        </size>
       </property>
-      <zorder>frame</zorder>
      </widget>
     </item>
     <item>
      <widget class="QFrame" name="frame">
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
+        <width>2000</width>
         <height>65</height>
        </size>
       </property>
@@ -209,17 +208,9 @@
         </layout>
        </item>
       </layout>
-      <zorder>filePathLabel</zorder>
-      <zorder>horizontalLayoutWidget</zorder>
-      <zorder>horizontalLayoutWidget_3</zorder>
      </widget>
     </item>
    </layout>
-   <zorder>horizontalSpacer</zorder>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder>customPlot</zorder>
-   <zorder>frame</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

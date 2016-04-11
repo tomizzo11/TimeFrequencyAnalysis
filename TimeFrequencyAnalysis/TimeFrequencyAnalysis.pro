@@ -18,7 +18,6 @@ TEMPLATE = app
 SOURCES +=  main.cpp\
             mainwindow.cpp \
             qcustomplot.cpp \
-    uiprocessor.cpp \
     display.cpp \
     calcobject.cpp
 
@@ -59,7 +58,6 @@ HEADERS  += mainwindow.h \
     aquila/transform/OouraFft.h \
     aquila/transform/Spectrogram.h \
     aquila/wrappers/SoundBufferAdapter.h \
-    uiprocessor.h \
     display.h \
     calcobject.h
 
